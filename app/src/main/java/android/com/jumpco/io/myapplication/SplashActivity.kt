@@ -21,12 +21,13 @@ import android.os.Handler as Handler1
 
 class SplashActivity : AppCompatActivity() {
 
+    //URL given
     val ENDPOINT_JSON = "https://android-interview.s3.eu-west-2.amazonaws.com/"
     private val SPLASH_TIME_OUT:Long = 3000
     var scoreValue = 0
     var maxScoreValue = 0
 
-
+    //
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //hiding title bar of this activity
