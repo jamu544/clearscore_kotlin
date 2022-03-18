@@ -1,4 +1,4 @@
-package android.com.jumpco.io.myapplication.utils
+package android.com.jumpco.io.myapplication.utilities
 
 import okhttp3.OkHttpClient
 

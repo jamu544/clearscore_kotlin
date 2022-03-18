@@ -1,7 +1,9 @@
-package android.com.jumpco.io.myapplication
+package android.com.jumpco.io.myapplication.controller
 
+import android.com.jumpco.io.myapplication.R
 import android.com.jumpco.io.myapplication.interfaces.ClearScoreService
-import android.com.jumpco.io.myapplication.pojo.ClearScoreModel
+import android.com.jumpco.io.myapplication.model.ClearScore
+import android.com.jumpco.io.myapplication.utilities.*
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
@@ -21,13 +23,10 @@ import android.os.Handler as Handler1
 
 class SplashActivity : AppCompatActivity() {
 
-    //URL given
-    val ENDPOINT_JSON = "https://android-interview.s3.eu-west-2.amazonaws.com/"
-    private val SPLASH_TIME_OUT:Long = 3000
-    var scoreValue = 0
-    var maxScoreValue = 0
+  // var clearScore = ClearScore("", ClearScore.Score(0,0))
 
-    //
+    lateinit var clearScore : ClearScore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         //hiding title bar of this activity
@@ -46,15 +45,12 @@ class SplashActivity : AppCompatActivity() {
     //display splashscreen and load the next activity
     private fun loadSplashScreen(){
         Handler1().postDelayed({
-            val bundle = Bundle()
-            bundle.putInt("Score",scoreValue)
-            bundle.putInt("Max Score",maxScoreValue)
 
-            val intent = Intent(this, MainActivity::class.java)
-            intent.putExtras(bundle)
-            startActivity(intent)
+            val donutActivity = Intent(this, DonutActivity::class.java)
+         //   donutActivity.putExtra(CLEAR_SCORE,clearScore)
+            startActivity(donutActivity)
             finish()
-        },SPLASH_TIME_OUT)
+        }, SPLASH_TIME_OUT)
     }
 
     //perform api call
@@ -65,7 +61,7 @@ class SplashActivity : AppCompatActivity() {
             .build()
         val service = retrofit.create(ClearScoreService::class.java)
         val call = service.getClearScoreInfo()
-        call.enqueue(object : Callback<ClearScoreModel> {
+        call.enqueue(object : Callback<ClearScore> {
             /**
              * Invoked for a received HTTP response.
              *
@@ -74,17 +70,27 @@ class SplashActivity : AppCompatActivity() {
              * Call [Response.isSuccessful] to determine if the response indicates success.
              */
             override fun onResponse(
-                call: Call<ClearScoreModel>?,
-                response: Response<ClearScoreModel>?
+                call: Call<ClearScore>?,
+                response: Response<ClearScore>?
             ) {
                 if(response?.isSuccessful == true) {
 
                     val scoreResponse = response?.body()
-                    scoreValue = scoreResponse.scoreModel?.score!!
-                    maxScoreValue = scoreResponse.scoreModel?.maxScoreValue!!
+                    if (scoreResponse != null) {
 
-                    println(scoreValue)
-                    println(maxScoreValue)
+//                        clearScore = ClearScore(scoreResponse.accountIDVStatus.toString(),)
+//                        clearScore.accountIDVStatus = scoreResponse.accountIDVStatus
+//                        clearScore.scoreModel.maxScoreValue = scoreResponse.maxScore
+//
+                        println("json results  ${scoreResponse.accountIDVStatus.toString()}")
+                        println("json results  ${scoreResponse.scoreModel}")
+//
+//                        println("Your score ${clearScore.score}")
+//                        println("MAx is ${clearScore.maxScore}")
+                    }
+
+
+
                 }
             }
 
@@ -92,7 +98,7 @@ class SplashActivity : AppCompatActivity() {
              * Invoked when a network exception occurred talking to the server or when an unexpected
              * exception occurred creating the request or processing the response.
              */
-            override fun onFailure(call: Call<ClearScoreModel>?, t: Throwable?) {
+            override fun onFailure(call: Call<ClearScore>?, t: Throwable?) {
                 if (t != null) {
                     Toast.makeText(this@SplashActivity,"${t.message}",Toast.LENGTH_SHORT)
                 }
@@ -104,22 +110,22 @@ class SplashActivity : AppCompatActivity() {
 
 
      // check internet connection
-    private fun isNetWorkConnected(): Boolean {
+     private fun isNetWorkConnected(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         if (connectivityManager != null){
             val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if(capabilities != null){
                 when {
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_CELLULAR")
+                        Log.i(TAG, INTERNET_CELLULAR)
                         return true
                     }
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                        Log.i("Internet", "NetworkCapabilities.TRANSPORT_WIFI")
+                        Log.i(TAG, INTERNET_WIFI)
                         return true
                     }
                     capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
-                        Log.i("Internet","NetworkCapabilities.TRANSPORT_ETHERNET")
+                        Log.i(TAG, INTERNET_ETHERNET)
                         return true
                     }
                 }

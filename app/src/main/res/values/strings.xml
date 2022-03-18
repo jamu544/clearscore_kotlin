@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Clear Score</string>
+    <string name="your_credit_score_is">Your credit score is:</string>
 </resources>

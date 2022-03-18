@@ -7,7 +7,7 @@
     android:orientation="vertical"
     android:gravity="center"
     android:background="@color/colorPrimary"
-    tools:context=".SplashActivity">
+    tools:context=".controller.SplashActivity">
     <ImageView
         android:src="@drawable/clearscore_odwa"
         android:layout_width="250dp"
