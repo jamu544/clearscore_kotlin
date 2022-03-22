@@ -1,16 +1,10 @@
 package android.com.jumpco.io.myapplication.model
 
 
-import com.google.gson.annotations.SerializedName
-import kotlinx.serialization.SerialName
+data class ClearScore (var accountIDVStatus:String?,
+                       var creditReportInfo:Score,
+                       var dashboardStatus:String,
+                       var personaType:String)
 
-
-
-data class ClearScore constructor(
-    var accountIDVStatus:String?,
-    @SerialName("creditReportInfo")var scoreModel:Score)
-
-data class Score (
-    @SerializedName("score")var score: Int,
-    @SerializedName("maxScoreValue")var maxScoreValue: Int)
+data class Score (var score: Int,var maxScoreValue: Int)
 

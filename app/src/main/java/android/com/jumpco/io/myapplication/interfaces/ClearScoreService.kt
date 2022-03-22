@@ -7,7 +7,7 @@ import retrofit2.http.POST
 
 interface ClearScoreService {
 
-    @POST("/endpoint.json")
+    @GET("/endpoint.json")
     fun getClearScoreInfo(): Call<ClearScore>
 
 }

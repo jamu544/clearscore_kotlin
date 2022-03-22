@@ -14,12 +14,19 @@ import android.util.Log
 import android.view.Window
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import com.google.gson.Gson
+import com.google.gson.JsonParser
+import kotlinx.serialization.json.JsonObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.os.Handler as Handler1
+import com.google.gson.GsonBuilder
+
+
+
 
 class SplashActivity : AppCompatActivity() {
 
@@ -55,9 +62,13 @@ class SplashActivity : AppCompatActivity() {
 
     //perform api call
     private fun getClearScoreInformation(){
+
+        val gson = GsonBuilder()
+            .setLenient()
+            .create()
         val retrofit = Retrofit.Builder()
             .baseUrl(ENDPOINT_JSON)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
         val service = retrofit.create(ClearScoreService::class.java)
         val call = service.getClearScoreInfo()
@@ -69,28 +80,49 @@ class SplashActivity : AppCompatActivity() {
              * Note: An HTTP response may still indicate an application-level failure such as a 404 or 500.
              * Call [Response.isSuccessful] to determine if the response indicates success.
              */
-            override fun onResponse(
-                call: Call<ClearScore>?,
-                response: Response<ClearScore>?
-            ) {
+            override fun onResponse(call: Call<ClearScore>?,response: Response<ClearScore>?) {
                 if(response?.isSuccessful == true) {
 
-                    val scoreResponse = response?.body()
-                    if (scoreResponse != null) {
 
+                    // val jsonObj: com.google.gson.JsonObject? = JsonParser().parse(response.body().toString()).asJsonObject
+
+                    val score = response?.body()?.creditReportInfo?.score
+
+                    val maxScore = response?.body()?.creditReportInfo?.maxScoreValue
+
+
+
+//                    val scoreResponse = response?.body()?.scoreModel?.score
+//                    val scoreResponse = response?.body()?.scoreModel?.score
+//                    val scoreResponse = response?.body()?.scoreModel?.score
+//                    if (scoreResponse != null) {
+                    println("My score $score and max $maxScore")
+//                    println("json tt resultxxxxs dash ${response.body()?.dashboardStatus}")
+//                    println("json tt resultxxxxs type  ${response.body()?.personaType}")
+//
+//                    println("json tt resultxxxxs typsssse  ${response.body()}")
+
+//                      var score = response.body()!!.scoreModel.score;
+//                      var max =  response.body()!!.scoreModel.maxScoreValue;
 //                        clearScore = ClearScore(scoreResponse.accountIDVStatus.toString(),)
 //                        clearScore.accountIDVStatus = scoreResponse.accountIDVStatus
 //                        clearScore.scoreModel.maxScoreValue = scoreResponse.maxScore
-//
-                        println("json results  ${scoreResponse.accountIDVStatus.toString()}")
-                        println("json results  ${scoreResponse.scoreModel}")
+
+               //         println("json tt results  $max")
+             //           println("json results  ${scoreResponse.scoreModel}")
 //
 //                        println("Your score ${clearScore.score}")
 //                        println("MAx is ${clearScore.maxScore}")
+            //        }
+
+
+
+                }
+                else {
+
+                    if (response != null) {
+                        Log.d("Respone", response.raw().toString())
                     }
-
-
-
                 }
             }
 
