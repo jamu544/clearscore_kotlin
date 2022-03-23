@@ -6,5 +6,9 @@ data class ClearScore (var accountIDVStatus:String?,
                        var dashboardStatus:String,
                        var personaType:String)
 
-data class Score (var score: Int,var maxScoreValue: Int)
+data class Score (var score: Int,
+                  var maxScoreValue: Int,
+                  var clientRef: String,
+                  var status: String
+                  )
 

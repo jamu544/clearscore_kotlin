@@ -1,53 +1,67 @@
 package android.com.jumpco.io.myapplication.controller
 
 import android.com.jumpco.io.myapplication.R
-import android.com.jumpco.io.myapplication.model.ClearScore
-import android.com.jumpco.io.myapplication.utilities.CLEAR_SCORE
+import android.com.jumpco.io.myapplication.model.ClearScoreDetails
+import android.com.jumpco.io.myapplication.utilities.EXTRA_DETAILS
+import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class DonutActivity : AppCompatActivity() {
+class DonutActivity : AppCompatActivity(),View.OnClickListener {
 
 
-    //lateinit var clearScore : ClearScore
+    lateinit var progressBar : ProgressBar
+    lateinit var clearScoreDetail: ClearScoreDetails
 
-
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putParcelable(EXTRA_DETAILS, clearScoreDetail)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        //val clearScore = intent.getParcelableExtra<ClearScore>(CLEAR_SCORE)
+        clearScoreDetail = intent.getParcelableExtra<ClearScoreDetails>(EXTRA_DETAILS)!!
+        progressBar = findViewById<ProgressBar>(R.id.stats_progressbar)
+        calculatedScoreTextView.setOnClickListener(this)
 
-    //    if(clearScore != null) {
-
-
-      //  calculatedScoreTextView.text = "${clearScore.score}/${clearScore.maxScore}"
-
-   //     }
-
-     //  val  progressBar = findViewById<ProgressBar>(R.id.stats_progressbar)
-    //   val results = findViewById<TextView>(R.id.calculation)
-
-        //get data from splashscreen
-//        val bundle = intent.extras
-//
-//        // performing the safety null check
-//        var score:Int? = null
-//        var maxScore:Int? = null
-//         score = intent.getIntExtra("Score",0)
-//        maxScore = intent.getIntExtra("Max Score",0)
-//
-//        results.text = "$score/$maxScore"
-//
-//        progressBar.progress = calculateCreditScore( score, maxScore)
-
+        if(clearScoreDetail != null) {
+            calculatedScoreTextView.text = "${clearScoreDetail.score}/${clearScoreDetail.maxScore}"
+            progressBar.progress = calculateCreditScore(clearScoreDetail.score, clearScoreDetail.maxScore)
+        }
     }
 
+    override fun onRestoreInstanceState(savedInstanceState: Bundle) {
+        super.onRestoreInstanceState(savedInstanceState)
+        if (savedInstanceState != null){
+            clearScoreDetail = savedInstanceState.getParcelable(EXTRA_DETAILS)!!
+
+        }
+    }
    //calculate the percentage of the users's progress
     fun calculateCreditScore(score: Int, maxScoreValue: Int): Int {
         val d = score.toDouble() / maxScoreValue.toDouble()
         return (d * 100).toInt()
     }
+
+    override fun onClick(view: View?) {
+        when(view?.getId()){
+            R.id.calculatedScoreTextView -> {
+
+                val detailsActivity = Intent(this, DetailsActivity::class.java)
+                detailsActivity.putExtra(EXTRA_DETAILS,clearScoreDetail)
+
+                startActivity(detailsActivity)
+                Toast.makeText(this, "You clicked me.", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+
+
 }
