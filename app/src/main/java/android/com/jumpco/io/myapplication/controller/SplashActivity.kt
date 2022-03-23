@@ -73,13 +73,9 @@ class SplashActivity : AppCompatActivity() {
     //perform api call
     private fun getClearScoreInformation(){
 
-        val retrofit = Retrofit.Builder()
-            .baseUrl(ENDPOINT_JSON)
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
-        val service = retrofit.create(ClearScoreService::class.java)
-        val call = service.getClearScoreInfo()
-        call.enqueue(object : Callback<ClearScore> {
+        val apiInterface = ClearScoreService.create().getClearScoreInfo()
+
+        apiInterface.enqueue(object : Callback<ClearScore> {
             /**
              * Invoked for a received HTTP response.
              *
@@ -96,7 +92,6 @@ class SplashActivity : AppCompatActivity() {
                     clearScoreDetails.clientRef = response?.body()?.creditReportInfo?.clientRef
                     clearScoreDetails.status = response?.body()?.creditReportInfo?.status
 
-
                     Log.d("Response successful", response.body().toString())
                 }
                 else {
@@ -111,7 +106,8 @@ class SplashActivity : AppCompatActivity() {
              */
             override fun onFailure(call: Call<ClearScore>?, t: Throwable?) {
                 if (t != null) {
-                    Toast.makeText(this@SplashActivity,"${t.message}",Toast.LENGTH_SHORT)
+                    Log.d(TAG,"${t.message}")
+                   // Toast.makeText(this@SplashActivity,"${t.message}",Toast.LENGTH_SHORT)
                 }
             }
         })
