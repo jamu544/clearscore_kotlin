@@ -31,6 +31,7 @@ class DonutActivity : AppCompatActivity(),View.OnClickListener {
         calculatedScoreTextView.setOnClickListener(this)
 
         if(clearScoreDetail != null) {
+            clientRefText.text ="Client Ref: ${clearScoreDetail.clientRef}"
             calculatedScoreTextView.text = "${clearScoreDetail.score}/${clearScoreDetail.maxScore}"
             progressBar.progress = calculateCreditScore(clearScoreDetail.score, clearScoreDetail.maxScore)
         }
