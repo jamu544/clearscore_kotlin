@@ -58,7 +58,7 @@ class DonutActivity : AppCompatActivity(),View.OnClickListener {
                 detailsActivity.putExtra(EXTRA_DETAILS,clearScoreDetail)
 
                 startActivity(detailsActivity)
-                Toast.makeText(this, "You clicked me.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "More details.", Toast.LENGTH_SHORT).show()
 
             }
         }
