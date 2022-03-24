@@ -1,6 +1,7 @@
 package android.com.jumpco.io.myapplication.controller
 
 import android.com.jumpco.io.myapplication.R
+import android.com.jumpco.io.myapplication.databinding.ActivitySplashBinding
 import android.com.jumpco.io.myapplication.interfaces.ClearScoreService
 import android.com.jumpco.io.myapplication.model.ClearScore
 import android.com.jumpco.io.myapplication.model.ClearScoreDetails
@@ -13,13 +14,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Window
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
 import android.os.Handler as Handler1
 
 
@@ -30,7 +28,7 @@ class SplashActivity : AppCompatActivity() {
      var clearScoreDetails = ClearScoreDetails(0,0,"",
        "","","")
 
-
+    private lateinit var binding: ActivitySplashBinding  //defining the binding class
 
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
@@ -41,7 +39,8 @@ class SplashActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         //hiding title bar of this activity
         window.requestFeature(Window.FEATURE_NO_TITLE)
-        setContentView(R.layout.activity_splash)
+        binding = ActivitySplashBinding.inflate(layoutInflater) //initializing the binding class
+        setContentView(binding.root) // we now set the contentview as the binding.root
 
         if (isNetWorkConnected()){
             getClearScoreInformation()

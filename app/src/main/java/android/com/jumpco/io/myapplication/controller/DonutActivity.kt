@@ -1,6 +1,7 @@
 package android.com.jumpco.io.myapplication.controller
 
 import android.com.jumpco.io.myapplication.R
+import android.com.jumpco.io.myapplication.databinding.ActivityDonutBinding
 import android.com.jumpco.io.myapplication.model.ClearScoreDetails
 import android.com.jumpco.io.myapplication.utilities.EXTRA_DETAILS
 import android.content.Intent
@@ -9,8 +10,6 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_donut.*
-
 
 class DonutActivity : AppCompatActivity(),View.OnClickListener {
 
@@ -18,22 +17,24 @@ class DonutActivity : AppCompatActivity(),View.OnClickListener {
     lateinit var progressBar : ProgressBar
     lateinit var clearScoreDetail: ClearScoreDetails
 
+    private lateinit var binding: ActivityDonutBinding  //defining the binding class
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         outState.putParcelable(EXTRA_DETAILS, clearScoreDetail)
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_donut)
+        binding = ActivityDonutBinding.inflate(layoutInflater) //initializing the binding class
+        setContentView(binding.root) // we now set the contentview as the binding.root
 
         clearScoreDetail = intent.getParcelableExtra<ClearScoreDetails>(EXTRA_DETAILS)!!
-        progressBar = findViewById<ProgressBar>(R.id.stats_progressbar)
-        calculatedScoreTextView.setOnClickListener(this)
+        binding.calculatedScoreTextView.setOnClickListener(this)
 
         if(clearScoreDetail != null) {
-            clientRefText.text ="Client Ref: ${clearScoreDetail.clientRef}"
-            calculatedScoreTextView.text = "${clearScoreDetail.score}/${clearScoreDetail.maxScore}"
-            progressBar.progress = calculateCreditScore(clearScoreDetail.score, clearScoreDetail.maxScore)
+            binding.clientRefText.text ="Client Ref: ${clearScoreDetail.clientRef}"
+            binding.calculatedScoreTextView.text = "${clearScoreDetail.score}/${clearScoreDetail.maxScore}"
+            binding.statsProgressbar.progress = calculateCreditScore(clearScoreDetail.score, clearScoreDetail.maxScore)
         }
     }
 
