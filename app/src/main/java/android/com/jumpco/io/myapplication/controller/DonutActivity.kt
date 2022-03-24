@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_donut.*
 
 
 class DonutActivity : AppCompatActivity(),View.OnClickListener {
@@ -24,7 +24,7 @@ class DonutActivity : AppCompatActivity(),View.OnClickListener {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_donut)
 
         clearScoreDetail = intent.getParcelableExtra<ClearScoreDetails>(EXTRA_DETAILS)!!
         progressBar = findViewById<ProgressBar>(R.id.stats_progressbar)
